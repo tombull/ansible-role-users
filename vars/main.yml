@@ -12,7 +12,7 @@ _users_default_groups:
   RedHat: wheel
   Suse:
 
-users_default_groups: "{{ _users_default_groups[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(_users_default_groups[ansible_distribution] | default(_users_default_groups[ansible_os_family] | default(_users_default_groups['default'])) }}"
+users_default_groups: "{{ _users_default_groups[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(_users_default_groups[ansible_distribution] | default(_users_default_groups[ansible_os_family] | default(_users_default_groups['default']))) }}"
 
 users_remove_initial_user_list:
   - name: "{{ initial_user }}"
