@@ -21,13 +21,14 @@
 - name: Loop over groups named the same as users
   include: group.yml
   with_items:
-    - '{{ users_user_list | selectattr("state", "ne", "absent") | list }}'
+    - "{{ users_user_list }}"
   loop_control:
     label: "{{ group.name }}"
     loop_var: group
   when:
     - users_user_list is defined
     - users_add_to_primary_group_same_name | bool
+    - group.state != 'absent'
 
 - name: Loop over users to create
   include: user.yml
