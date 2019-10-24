@@ -8,7 +8,10 @@ _users_default_groups:
   Archlinux:
   Coreos: wheel,docker,systemd-journal,portage,rkt
   Debian: audio,cdrom,dip,floppy,video,plugdev,netdev,scanner,bluetooth,debian-tor,lpadmin,sudo
+  Debian-10: audio,cdrom,dip,floppy,video,plugdev,netdev,sudo
   Ubuntu: adm,cdrom,dip,lpadmin,plugdev,sambashare,debian-tor,libvirtd,lxd,sudo
+  Ubuntu-18: adm,cdrom,dip,lpadmin,plugdev,sambashare,lxd,sudo
+  Ubuntu-19: adm,cdrom,dip,lpadmin,plugdev,sambashare,sudo
   RedHat: wheel
   Suse:
 

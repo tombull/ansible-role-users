@@ -18,6 +18,17 @@
   when:
     - users_group_list is defined
 
+- name: Loop over groups named the same as users
+  include: group.yml
+  with_items:
+    - '{{ users_user_list | selectattr("state", "notequalto", "absent") }}'
+  loop_control:
+    label: "{{ group.name }}"
+    loop_var: group
+  when:
+    - users_user_list is defined
+    - users_add_to_primary_group_same_name | bool
+
 - name: Loop over users to create
   include: user.yml
   with_items:
@@ -33,6 +44,20 @@
     name: check-login
   when:
     - desired_user is defined
+
+- name: Ensure users have their passwords removed if necessary
+  user:
+    name: "{{ user.name }}"
+    state: "{{ user.state | default('present') }}"
+    password_lock: "{{ user.passwordless | default(omit) }}"
+  with_items:
+    - "{{ users_user_list }}"
+  loop_control:
+    label: "{{ user.name }}"
+    loop_var: user
+  when:
+    - users_user_list is defined
+  become: yes
 
 - name: Delete initial user
   user:

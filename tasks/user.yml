@@ -10,7 +10,6 @@
     group: "{{ user.name if users_add_to_primary_group_same_name | bool else user.group | default(omit) }}"
     groups: "{{ users_default_groups if users_add_to_default_groups | bool else user.groups | default(omit) }}"
     shell: "{{ user.shell | default(users_shell) }}"
-    password_lock: "{{ user.passwordless | default(omit) }}"
   register: users_manage_user
   become: yes
 
