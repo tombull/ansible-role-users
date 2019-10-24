@@ -21,7 +21,7 @@
 - name: Loop over groups named the same as users
   include: group.yml
   with_items:
-    - '{{ users_user_list | selectattr("state", "ne", "absent") }}'
+    - '{{ users_user_list | selectattr("state", "ne", "absent") | list }}'
   loop_control:
     label: "{{ group.name }}"
     loop_var: group
