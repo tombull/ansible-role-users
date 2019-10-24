@@ -21,12 +21,12 @@
 - name: Loop over users to create
   include: user.yml
   with_items:
-    - "{{ users_user_list_processed }}"
+    - "{{ users_user_list }}"
   loop_control:
     label: "{{ user.name }}"
     loop_var: user
   when:
-    - users_user_list_processed is defined
+    - users_user_list is defined
 
 - name: Ensure ansible is using the correct login
   include_role:
@@ -43,6 +43,7 @@
   when:
     - users_initial_user_not_in_create_list | bool
     - users_remove_initial_user | bool
+  become: yes
 
 - name: Manage cron permission file
   template:
