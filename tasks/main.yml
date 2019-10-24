@@ -28,7 +28,7 @@
   when:
     - users_user_list is defined
     - users_add_to_primary_group_same_name | bool
-    - group.state != 'absent'
+    - group.state | default('present') != 'absent'
 
 - name: Loop over users to create
   include: user.yml
