@@ -4,12 +4,19 @@
 # The location to store ssh keys for user
 users_ssh_key_directory: ssh_keys
 
+users_manage_ssh_keys: no
+
 # The default shell if not overwritten.
 users_shell: /bin/bash
 
 # manage cron permissions via /etc/cron.allow
-users_cron_allow: true
+users_manage_cron_allow: no
 
+users_remove_initial_user: yes
+
+users_add_to_default_groups: yes
+
+users_add_to_primary_group_same_name: yes
 # A list of groups and properties.
 # users_group_list:
 #   - name: robertdb

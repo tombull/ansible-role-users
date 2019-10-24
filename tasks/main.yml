@@ -1,13 +1,14 @@
 ---
 # tasks file for users
-- name: create local ssh_key_directory
+- name: Create local ssh_key_directory
   file:
     path: "{{ users_ssh_key_directory }}"
     state: directory
   delegate_to: localhost
   become: no
+  when: users_manage_ssh_keys | bool
 
-- name: loop over users_group_list
+- name: Loop over groups
   include: group.yml
   with_items:
     - "{{ users_group_list }}"
@@ -17,24 +18,42 @@
   when:
     - users_group_list is defined
 
-- name: loop over users_user_list
+- name: Loop over users to create
   include: user.yml
   with_items:
-    - "{{ users_user_list }}"
+    - "{{ users_user_list_processed }}"
   loop_control:
     label: "{{ user.name }}"
     loop_var: user
   when:
-    - users_user_list is defined
+    - users_user_list_processed is defined
 
-- name: manage cron permission
+- name: Ensure ansible is using the correct login
+  include_role:
+    name: check-login
+  when:
+    - desired_user is defined
+
+- name: Delete initial user
+  user:
+    name: "{{ initial_user }}"
+    state: absent
+    force: yes
+    remove: no
+  when:
+    - users_initial_user_not_in_create_list | bool
+    - users_remove_initial_user | bool
+
+- name: Manage cron permission file
   template:
     src: cron.allow.j2
     dest: /etc/cron.allow
-  when: users_cron_allow|bool
+  when: users_manage_cron_allow | bool
+  become: yes
 
-- name: check existence of /etc/cron.allow
+- name: Ensure /etc/cron.allow doesn't exist if not managed by this
   file:
     path: /etc/cron.allow
     state: absent
-  when: not users_cron_allow|bool
+  when: not users_manage_cron_allow | bool
+  become: yes
